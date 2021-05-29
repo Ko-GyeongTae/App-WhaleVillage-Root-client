@@ -4,13 +4,12 @@ import { StyleSheet, View } from "react-native";
 
 const Style = StyleSheet.create({
     Component: {
-        width: '100%',
+        width: '94%',
         height: 50,
-        padding: 10,
-        fontSize: (props) => props.fontSize,
-        fontWeight: 100,
+        fontSize: 20,
         backgroundColor: '#f5f5f5',
-        borderRadius: 25,
+        borderRadius: 10,
+        elevation: 5
     }
 })
 
@@ -21,7 +20,6 @@ const AuthInput = ({
     keyboardType = "default",
     autoCapitalize = "none",
     returnKeyType = "done",
-    fontSize = "20px",
     onChangeText,
     onChange,
     onSubmitEditing = () => null,

@@ -1,8 +1,8 @@
-import AsyncStorage from '@react-native-community/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React from 'react';
 import { useEffect, useState } from 'react';
 import { AuthProvider } from './AuthContext';
-import NavController from './components/NavController';
+import NavController from './src/components/NavController';
 
 export default () => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
