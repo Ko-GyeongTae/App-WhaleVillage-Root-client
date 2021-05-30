@@ -1,10 +1,11 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import DecoButton from "../components/DecoButton.js";
 
 export default ({ navigation }) => (
   
     <View style={Style.Container}>
+        <Text style={FontStyle.Title}>고래산마을</Text>
       <View style={Style.ButtonArea}>
         <DecoButton
           text={"공지 설정"}
@@ -32,5 +33,13 @@ const Style = StyleSheet.create({
         alignItems: 'center',
         marginTop: '37.9%',
         width: '100%',
+    }
+});
+
+const FontStyle = StyleSheet.create({
+    Title: {
+        paddingTop: 50,
+        fontSize: 60,
+        color: 'white',
     }
 })
