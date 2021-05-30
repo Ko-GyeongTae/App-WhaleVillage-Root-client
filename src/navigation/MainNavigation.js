@@ -9,10 +9,10 @@ const Stack = createStackNavigator();
 
 export default () => (
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="Home" headerMode="none">
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="WritePost" component={WritePost} />
-      <Stack.Screen name="NoticeSetting" component={NoticeSetting} />
+    <Stack.Navigator initialRouteName="Home" options={{headerTitle: '홈'}}>
+      <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
+      <Stack.Screen name="WritePost" component={WritePost} options={{headerTitle: '공지작성'}}/>
+      <Stack.Screen name="NoticeSetting" component={NoticeSetting} options={{headerTitle: '공지목록'}}/>
     </Stack.Navigator>
   </NavigationContainer>
 );

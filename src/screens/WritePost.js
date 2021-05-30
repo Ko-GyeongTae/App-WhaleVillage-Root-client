@@ -13,7 +13,7 @@ import {
     useWindowDimensions,
 } from "react-native";
 
-export default () => {
+export default ({navigation}) => {
     const [ok, setOk] = useState(false);
     const [photos, setPhotos] = useState([]);
     const [chosenPhoto, setChosenPhoto] = useState("");
@@ -35,11 +35,21 @@ export default () => {
             }
         } else if (accessPrivileges !== "none") {
             setOk(true);
+            getPhotos();
         }
     };
+    const HeaderRight = () => (
+        <TouchableOpacity>
+            <Text style={FontStyle.HeaderRightText}>Next</Text>
+        </TouchableOpacity>
+    );
     useEffect(() => {
         getPermissions();
-        getPhotos();
+    }, []);
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: HeaderRight,
+        });
     }, []);
     const numColumns = 4;
     const { width } = useWindowDimensions();
@@ -53,7 +63,11 @@ export default () => {
                 style={{ width: width / numColumns, height: 100 }}
             />
             <View style={Style.IconContainer}>
-                <Ionicons name="checkmark-circle" size={18} color="white" />
+                <Ionicons
+                    name="checkmark-circle"
+                    size={18}
+                    color={photo.uri === chosenPhoto ? 'blue' : "white"}
+                />
             </View>
         </TouchableOpacity>
     );
@@ -96,5 +110,13 @@ const Style = StyleSheet.create({
         position: 'absolute',
         bottom: 5,
         right: 0,
+    }
+});
+
+const FontStyle = StyleSheet.create({
+    HeaderRightText: {
+        color: 'blue',
+        fontSize: 16,
+        marginRight: 7,
     }
 })
