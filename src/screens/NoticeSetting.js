@@ -44,7 +44,7 @@ export default ({navigation}) => {
                             alignItems: "center",
                         }}
                     >
-                        {noticeList.length === 0 && <Text>게시물이 없습니다.</Text>}
+                        {noticeList.length === 0 && <Text style={{marginTop: 20}}>게시물이 없습니다.</Text>}
                         {noticeList?.map(notice => (
                             <NoticeBox
                                 key={notice.uid}
@@ -66,7 +66,8 @@ const Style = StyleSheet.create({
         height: '10%',
         backgroundColor: '#ffffff',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
+        paddingTop: 10,
         elevation: 5,
     },
     Body: {

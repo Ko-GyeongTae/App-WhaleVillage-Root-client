@@ -12,8 +12,11 @@ export default ({ navigation }) => (
           onPress={() => navigation.navigate("NoticeSetting")}
         />
         <DecoButton
+          text={"공지 작성"}
+          onPress={() => navigation.navigate("WritePost")}
+        />
+        <DecoButton
           text={"링크 설정"}
-          bgColor={"#ffffff"}
           onPress={() => navigation.navigate("Signup")}
         />
       </View>
