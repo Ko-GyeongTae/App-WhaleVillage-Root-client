@@ -32,6 +32,7 @@ export default ({navigation}) => {
                     style={Component.List}
                     onRefresh={() => {
                         console.log('refresh!');
+                        GetList();
                     }}
                     pullHeight={400}
                 >
@@ -47,9 +48,8 @@ export default ({navigation}) => {
                         {noticeList?.map(notice => (
                             <NoticeBox
                                 key={notice.uid}
-                                content={notice.content}
                                 date={notice.date}
-                                postUid={notice.uid}
+                                uid={notice.uid}
                                 title={notice.title}
                             />
                         ))}

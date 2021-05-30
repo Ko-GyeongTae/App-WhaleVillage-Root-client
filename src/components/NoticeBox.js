@@ -1,53 +1,65 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React from "react";
+import { useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { baseUri } from "../../env";
 
 const Component = StyleSheet.create({
-    Component: {
-        flex: 1,
-        width: 350,
-        height: 80,
-        marginTop: '3%',
-        marginBottom: '3%',
-        borderRadius: 10,
-        backgroundColor: 'white',
-        elevation: 5,
-    },
-    Header: {
-        flex: 1,
-        paddingTop: 15,
-        paddingLeft: 10,
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start',
-    },
-    Bottom:{
-        alignItems: 'flex-end',
-        paddingBottom: 5,
-        paddingRight: 5,
-    }
+  Component: {
+    flex: 1,
+    width: 350,
+    height: 80,
+    marginTop: '3%',
+    marginBottom: '3%',
+    borderRadius: 10,
+    backgroundColor: 'white',
+    elevation: 5,
+  },
+  Header: {
+    flex: 1,
+    paddingTop: 15,
+    paddingLeft: 10,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+  },
+  Bottom: {
+    alignItems: 'flex-end',
+    paddingBottom: 5,
+    paddingRight: 5,
+  }
 });
 
 const FontStyle = StyleSheet.create({
-    Title: {
-        color: 'black',
-        fontWeight: 'bold',
-        fontSize: 20,
-    },
-    Day:{
-        fontSize: 15,
-        color: 'black',
-    }
+  Title: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  Day: {
+    fontSize: 15,
+    color: 'black',
+  }
 });
 
 export default (props) => {
+  console.log(props);
+  const [noticeList, setNoticeList] = useState([]);
   const date = new Date(props.date);
   const GetToken = async () => {
     const token = await AsyncStorage.getItem("jwt");
     return token;
   };
-
+  const GetList = async () => {
+    await axios.get(`${baseUri.outter_net}/api/v1/post`)
+      .then(res => {
+        console.log(res.data);
+        setNoticeList(res.data);
+      })
+      .catch(e => {
+        console.log(e);
+      })
+  }
   const PostDelete = async () => {
     const token = await GetToken();
 
@@ -57,9 +69,9 @@ export default (props) => {
 
     await axios
       .delete(`${baseUri.outter_net}/api/v1/post/${props.uid}`, config)
-      .then(function (response){
+      .then(function (response) {
         console.log(response);
-        GetPost();
+        GetList();
       })
       .catch(function (error) {
         console.log(error);
