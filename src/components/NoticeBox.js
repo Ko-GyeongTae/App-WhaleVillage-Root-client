@@ -1,5 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { baseUri } from "../../env";
 
 const Component = StyleSheet.create({
     Component: {
@@ -40,8 +43,50 @@ const FontStyle = StyleSheet.create({
 
 export default (props) => {
   const date = new Date(props.date);
+  const GetToken = async () => {
+    const token = await AsyncStorage.getItem("jwt");
+    return token;
+  };
+
+  const PostDelete = async () => {
+    const token = await GetToken();
+
+    const config = {
+      headers: { authentication: token },
+    };
+
+    await axios
+      .delete(`${baseUri.outter_net}/api/v1/post/${props.uid}`, config)
+      .then(function (response){
+        console.log(response);
+        GetPost();
+      })
+      .catch(function (error) {
+        console.log(error);
+        Alert.alert("게시물을 삭제할 수 없습니다.");
+      });
+  };
+
+  const confirmAlert = () => {
+    Alert.alert(
+      "삭제하시겠습니까?",
+      "",
+      [
+        {
+          text: "No",
+          onPress: () => null,
+        },
+        {
+          text: "Yes",
+          onPress: () => PostDelete(),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
-    <TouchableOpacity style={Component.Component} onPress={() => props.onPress()}>
+    <TouchableOpacity style={Component.Component} onPress={() => confirmAlert()}>
       <View style={Component.Header}>
         <Text style={FontStyle.Title}>{props.title}</Text>
       </View>
