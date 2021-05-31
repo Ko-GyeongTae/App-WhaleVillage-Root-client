@@ -3,7 +3,6 @@ import * as MediaLibrary from 'expo-media-library';
 import React, { useState, useEffect } from 'react';
 import { Ionicons } from "@expo/vector-icons";
 import {
-    Button,
     View,
     Text,
     StyleSheet,
@@ -12,8 +11,11 @@ import {
     TouchableOpacity,
     useWindowDimensions,
 } from "react-native";
+import axios from 'axios';
+import { baseUri } from '../../env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default ({navigation}) => {
+export default ({ navigation }) => {
     const [ok, setOk] = useState(false);
     const [photos, setPhotos] = useState([]);
     const [chosenPhoto, setChosenPhoto] = useState("");
@@ -21,6 +23,10 @@ export default ({navigation}) => {
         const { assets: photos } = await MediaLibrary.getAssetsAsync();
         setPhotos(photos);
         setChosenPhoto(photos[0]?.uri);
+    };
+    const GetToken = async () => {
+        const token = await AsyncStorage.getItem("jwt");
+        return token;
     };
     const getPermissions = async () => {
         const {
@@ -38,8 +44,33 @@ export default ({navigation}) => {
             getPhotos();
         }
     };
+    const uploadImage = async() => {
+        const formData = new FormData();
+        const token = await GetToken();
+
+        const config = {
+            headers: { 
+                'Content-Type': 'multipart/form-data',
+                authentication: token 
+            },
+        };
+        formData.append("media", chosenPhoto);
+
+        await axios.post(`${baseUri.outter_net}/api/v1/media`, formData, config)
+            .then(res => {
+                console.log(res.data);
+                navigation.navigate("WritePost", res.data);
+            })
+            .catch(e => {
+                console.log(e);
+            });
+    }
     const HeaderRight = () => (
-        <TouchableOpacity>
+        <TouchableOpacity
+            onPress={() =>
+                uploadImage()
+            }
+        >
             <Text style={FontStyle.HeaderRightText}>Next</Text>
         </TouchableOpacity>
     );
@@ -54,6 +85,7 @@ export default ({navigation}) => {
     const numColumns = 4;
     const { width } = useWindowDimensions();
     const choosePhoto = (uri) => {
+        console.log(chosenPhoto);
         setChosenPhoto(uri);
     };
     const renderItem = ({ item: photo }) => (

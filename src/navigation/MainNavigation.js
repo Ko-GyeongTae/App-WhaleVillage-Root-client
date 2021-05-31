@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Home from '../screens/Home';
 import NoticeSetting from "../screens/NoticeSetting";
 import WritePost from "../screens/WritePost";
+import UploadImage from "../screens/UploadImage";
 
 const Stack = createStackNavigator();
 
@@ -13,6 +14,7 @@ export default () => (
       <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
       <Stack.Screen name="WritePost" component={WritePost} options={{headerTitle: '공지작성'}}/>
       <Stack.Screen name="NoticeSetting" component={NoticeSetting} options={{headerTitle: '공지목록'}}/>
+      <Stack.Screen name="UploadImage" component={UploadImage} options={{headerTitle: '업로드'}}/>
     </Stack.Navigator>
   </NavigationContainer>
 );

@@ -1,93 +1,55 @@
+import React, { useEffect } from "react";
+import { Text, View, StyleSheet, TextInput } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import useInput from "../hooks/useInput";
+import contentInput from "../hooks/contentInput";
 
-import * as MediaLibrary from 'expo-media-library';
-import React, { useState, useEffect } from 'react';
-import { Ionicons } from "@expo/vector-icons";
-import {
-    Button,
-    View,
-    Text,
-    StyleSheet,
-    FlatList,
-    Image,
-    TouchableOpacity,
-    useWindowDimensions,
-} from "react-native";
-
-export default ({navigation}) => {
-    const [ok, setOk] = useState(false);
-    const [photos, setPhotos] = useState([]);
-    const [chosenPhoto, setChosenPhoto] = useState("");
-    const getPhotos = async () => {
-        const { assets: photos } = await MediaLibrary.getAssetsAsync();
-        setPhotos(photos);
-        setChosenPhoto(photos[0]?.uri);
-    };
-    const getPermissions = async () => {
-        const {
-            accessPrivileges,
-            canAskAgain,
-        } = await MediaLibrary.getPermissionsAsync();
-        if (accessPrivileges === "none" && canAskAgain) {
-            const { accessPrivileges } = await MediaLibrary.requestPermissionsAsync();
-            if (accessPrivileges !== "none") {
-                setOk(true);
-                getPhotos();
-            }
-        } else if (accessPrivileges !== "none") {
-            setOk(true);
-            getPhotos();
-        }
-    };
+export default function UploadForm({ navigation }) {
+    const titleInput = useInput();
+    const _contentInput = contentInput();
+    const UploadPost = async() => {
+        const { value: title } = titleInput;
+        const { value: content } = _contentInput;
+        console.log(title);
+        console.log(content);
+    }
     const HeaderRight = () => (
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => UploadPost()}>
             <Text style={FontStyle.HeaderRightText}>Next</Text>
         </TouchableOpacity>
     );
     useEffect(() => {
-        getPermissions();
-    }, []);
-    useEffect(() => {
         navigation.setOptions({
             headerRight: HeaderRight,
-        });
-    }, []);
-    const numColumns = 4;
-    const { width } = useWindowDimensions();
-    const choosePhoto = (uri) => {
-        setChosenPhoto(uri);
-    };
-    const renderItem = ({ item: photo }) => (
-        <TouchableOpacity onPress={() => choosePhoto(photo.uri)}>
-            <Image
-                source={{ uri: photo.uri }}
-                style={{ width: width / numColumns, height: 100 }}
-            />
-            <View style={Style.IconContainer}>
-                <Ionicons
-                    name="checkmark-circle"
-                    size={18}
-                    color={photo.uri === chosenPhoto ? 'blue' : "white"}
-                />
-            </View>
-        </TouchableOpacity>
-    );
+        })
+    }, [])
     return (
         <View style={Style.Container}>
-            <View style={Style.Top}>
-                {chosenPhoto !== "" ? (
-                    <Image
-                        source={{ uri: chosenPhoto }}
-                        style={{ width, height: "100%" }}
-                    />
-                ) : null}
+            <View style={Style.Header}>
+                <TextInput 
+                    {...titleInput}
+                    style={Style.Input}
+                    placeholder={'제목'}
+                    onEndEditing={() => console.log("onEndEditing")}
+                    onSubmitEditing={() => console.log("onSubmitEditing")}
+                    returnKeyType="next"
+                />
+            </View>
+            <View style={Style.Body}>
+                <TextInput 
+                    {..._contentInput}
+                    style={Style.Content}
+                    placeholder={'내용'}
+                    onEndEditing={() => console.log("onEndEditing")}
+                    onSubmitEditing={() => console.log("onSubmitEditing")}
+                    returnKeyType="next"
+                    multiline ={true}
+                />
             </View>
             <View style={Style.Bottom}>
-                <FlatList
-                    data={photos}
-                    numColumns={numColumns}
-                    keyExtractor={(photo) => photo.id}
-                    renderItem={renderItem}
-                />
+                <TouchableOpacity onPress={() => navigation.navigate("UploadImage")}>
+                    <Text>UploadImage</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -96,22 +58,50 @@ export default ({navigation}) => {
 const Style = StyleSheet.create({
     Container: {
         flex: 1,
-        backgroundColor: 'black',
+        backgroundColor: '#f0f0f0',
     },
-    Top: {
+    Header: {
+        width: '100%',
+        height: 80,
+        marginTop: 0,
+        backgroundColor: 'yellow',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    Body: {
         flex: 1,
-        backgroundColor: 'black',
+        backgroundColor: 'green',
+        alignItems: 'center',
     },
     Bottom: {
-        flex: 1,
-        backgroundColor: 'black',
+        width: '100%',
+        height: 300,
+        marginBottom: 0,
+        backgroundColor: 'pink',
     },
-    IconContainer: {
-        position: 'absolute',
-        bottom: 5,
-        right: 0,
+    Input: {
+        width: 360,
+        height: 40,
+        backgroundColor: '#f5f5f5',
+        paddingLeft: 10,
+    },
+    Content:{
+        width: 360,
+        height: 340,
+        backgroundColor: '#f5f5f5',
+        paddingLeft: 10,
+        textAlignVertical: 'top',
+    },
+    Photo: {
+        width: '100%',
+        height: 50,
+    },
+    HeaderRightText: {
+        color: 'blue',
+        fontSize: 16,
+        marginRight: 7,
     }
-});
+})
 
 const FontStyle = StyleSheet.create({
     HeaderRightText: {
