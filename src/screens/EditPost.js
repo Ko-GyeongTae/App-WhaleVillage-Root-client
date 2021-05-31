@@ -48,6 +48,8 @@ export default ({navigation}) => {
                                 date={notice.date}
                                 uid={notice.uid}
                                 title={notice.title}
+                                type={"update"}
+                                navigations={navigation}
                             />
                         ))}
                     </ScrollView>

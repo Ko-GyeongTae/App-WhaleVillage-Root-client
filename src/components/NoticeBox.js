@@ -97,31 +97,12 @@ export default (props) => {
     );
   };
 
-  const PostUpdate = async() => {
-    const token = await GetToken();
-
-    const config = {
-      headers: { authentication: token },
-    };
-
-    await axios
-      .put(`${baseUri.outter_net}/api/v1/post/${props.uid}`, config)
-      .then(res => {
-        console.log(res);
-        GetList();
-      })
-      .catch(e => {
-        console.log(e);
-        Alert.alert("게시물을 수정할 수 없습니다.");
-      });
-  }
-
   const onPressFunc = (type) => {
     if(type === "delete"){
       confirmAlert();
     }
     if(type === "update"){
-      PostUpdate();
+      props.navigations.navigate("WritePost", props);
     }
   }
 
