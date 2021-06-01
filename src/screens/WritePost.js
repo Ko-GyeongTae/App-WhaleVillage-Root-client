@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Text, View, StyleSheet, TextInput, Keyboard } from "react-native";
+import { Text, View, StyleSheet, TextInput, Keyboard, Image, ScrollView } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import useInput from "../hooks/useInput";
 import contentInput from "../hooks/contentInput";
@@ -11,21 +11,23 @@ export default function UploadForm({ navigation, route }) {
     const param = route.params;
     const titleInput = useInput("");
     const _contentInput = contentInput("");
-    const PreLoad = async() => {
-        if(!param){
+    const [images, setImages] = useState([]);
+    const PreLoad = async () => {
+        if (!param) {
             return;
         }
         await axios.get(`${baseUri.outter_net}/api/v1/post/${param.uid}`)
-        .then(res => {
-            console.log(res.data);
-            titleInput.onChangeText(res.data.title);
-            _contentInput.onChangeText(res.data.contents);
-        })
-        .catch(e => {
-            console.log(e);
-        });
+            .then(res => {
+                console.log(res.data);
+                titleInput.onChangeText(res.data.title);
+                _contentInput.onChangeText(res.data.contents);
+                setImages(res.data.media);
+            })
+            .catch(e => {
+                console.log(e);
+            });
     }
-    const UploadPost = async() => {
+    const UploadPost = async () => {
         console.log("Upload!");
         const { value: title } = titleInput;
         const { value: content } = _contentInput;
@@ -46,7 +48,7 @@ export default function UploadForm({ navigation, route }) {
     return (
         <View style={Style.Container}>
             <View style={Style.Header}>
-                <TextInput 
+                <TextInput
                     {...titleInput}
                     style={Style.Input}
                     placeholder={'제목'}
@@ -54,19 +56,35 @@ export default function UploadForm({ navigation, route }) {
                 />
             </View>
             <View style={Style.Body}>
-                <TextInput 
+                <TextInput
                     {..._contentInput}
                     style={Style.Content}
                     placeholder={'내용'}
                     returnKeyType="next"
-                    multiline ={true}
+                    multiline={true}
                     autoCorrect={false}
                 />
             </View>
             <View style={Style.Bottom}>
-                <TouchableOpacity onPress={() => navigation.navigate("UploadImage")}>
+                <TouchableOpacity style={Style.Button} onPress={() => navigation.navigate("UploadImage")}>
                     <Text>UploadImage</Text>
                 </TouchableOpacity>
+                <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={true}
+                    onMomentumScrollEnd={
+                        () => { console.log('Scrolling is End') }
+                    }
+                >
+
+                    {images?.map(m => {
+                        return (
+                            <TouchableOpacity>
+                                <Image style={Style.Photo} source={{ uri: `${baseUri.outter_net}/api/v1/media/${m}` }} />
+                            </TouchableOpacity>
+                        )
+                    })}
+                </ScrollView>
             </View>
         </View>
     );
@@ -92,7 +110,7 @@ const Style = StyleSheet.create({
     },
     Bottom: {
         width: '100%',
-        height: 300,
+        height: 280,
         marginBottom: 0,
         backgroundColor: 'pink',
     },
@@ -102,21 +120,28 @@ const Style = StyleSheet.create({
         backgroundColor: '#f5f5f5',
         paddingLeft: 10,
     },
-    Content:{
+    Content: {
         width: 360,
-        height: 340,
+        height: 370,
         backgroundColor: '#f5f5f5',
         paddingLeft: 10,
         textAlignVertical: 'top',
     },
     Photo: {
-        width: '100%',
-        height: 50,
+        width: 150,
+        height: 150,
     },
     HeaderRightText: {
         color: 'blue',
         fontSize: 16,
         marginRight: 7,
+    },
+    Button: {
+        width: '100%',
+        height: 50,
+        backgroundColor: 'red',
+        alignItems: 'center',
+        justifyContent: 'center',
     }
 })
 
