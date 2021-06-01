@@ -56,6 +56,7 @@ export default (props) => {
           }, config)
           .then(function (response) {
             console.log(response.data);
+            props.onPress();
           })
           .catch(function (error) {
             console.log(error.response);

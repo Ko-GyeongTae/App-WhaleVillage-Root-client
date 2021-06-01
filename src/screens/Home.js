@@ -20,8 +20,8 @@ export default ({ navigation }) => (
           onPress={() => navigation.navigate("WritePost")}
         />
         <DecoButton
-          text={"링크 설정"}
-          onPress={() => navigation.navigate("Signup")}
+          text={"유튜브링크 설정"}
+          onPress={() => navigation.navigate("SetYoutubeLink")}
         />
       </View>
     </View>
