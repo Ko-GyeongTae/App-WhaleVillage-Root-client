@@ -1,13 +1,32 @@
 import React, { useEffect } from "react";
-import { Text, View, StyleSheet, TextInput } from "react-native";
+import { Text, View, StyleSheet, TextInput, Keyboard } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import useInput from "../hooks/useInput";
 import contentInput from "../hooks/contentInput";
+import { useState } from "react";
+import axios from "axios";
+import { baseUri } from "../../env";
 
-export default function UploadForm({ navigation }) {
-    const titleInput = useInput();
-    const _contentInput = contentInput();
+export default function UploadForm({ navigation, route }) {
+    const param = route.params;
+    const titleInput = useInput("");
+    const _contentInput = contentInput("");
+    const PreLoad = async() => {
+        if(!param){
+            return;
+        }
+        await axios.get(`${baseUri.outter_net}/api/v1/post/${param.uid}`)
+        .then(res => {
+            console.log(res.data);
+            titleInput.onChangeText(res.data.title);
+            _contentInput.onChangeText(res.data.contents);
+        })
+        .catch(e => {
+            console.log(e);
+        });
+    }
     const UploadPost = async() => {
+        console.log("Upload!");
         const { value: title } = titleInput;
         const { value: content } = _contentInput;
         console.log(title);
@@ -21,7 +40,8 @@ export default function UploadForm({ navigation }) {
     useEffect(() => {
         navigation.setOptions({
             headerRight: HeaderRight,
-        })
+        });
+        PreLoad();
     }, [])
     return (
         <View style={Style.Container}>
@@ -30,8 +50,6 @@ export default function UploadForm({ navigation }) {
                     {...titleInput}
                     style={Style.Input}
                     placeholder={'제목'}
-                    onEndEditing={() => console.log("onEndEditing")}
-                    onSubmitEditing={() => console.log("onSubmitEditing")}
                     returnKeyType="next"
                 />
             </View>
@@ -40,10 +58,9 @@ export default function UploadForm({ navigation }) {
                     {..._contentInput}
                     style={Style.Content}
                     placeholder={'내용'}
-                    onEndEditing={() => console.log("onEndEditing")}
-                    onSubmitEditing={() => console.log("onSubmitEditing")}
                     returnKeyType="next"
                     multiline ={true}
+                    autoCorrect={false}
                 />
             </View>
             <View style={Style.Bottom}>

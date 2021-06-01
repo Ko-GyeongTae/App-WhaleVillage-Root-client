@@ -12,6 +12,10 @@ export default ({ navigation }) => (
           onPress={() => navigation.navigate("NoticeSetting")}
         />
         <DecoButton
+          text={"공지 수정"}
+          onPress={() => navigation.navigate("EditPost")}
+        />
+        <DecoButton
           text={"공지 작성"}
           onPress={() => navigation.navigate("WritePost")}
         />

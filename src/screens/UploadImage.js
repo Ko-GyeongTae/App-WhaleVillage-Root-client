@@ -1,4 +1,4 @@
-
+/*
 import * as MediaLibrary from 'expo-media-library';
 import React, { useState, useEffect } from 'react';
 import { Ionicons } from "@expo/vector-icons";
@@ -21,8 +21,9 @@ export default ({ navigation }) => {
     const [chosenPhoto, setChosenPhoto] = useState("");
     const getPhotos = async () => {
         const { assets: photos } = await MediaLibrary.getAssetsAsync();
+        console.log(photos)
         setPhotos(photos);
-        setChosenPhoto(photos[0]?.uri);
+        setChosenPhoto(photos[0]);
     };
     const GetToken = async () => {
         const token = await AsyncStorage.getItem("jwt");
@@ -50,11 +51,13 @@ export default ({ navigation }) => {
 
         const config = {
             headers: { 
+                Accept: 'application/json',
                 'Content-Type': 'multipart/form-data',
                 authentication: token 
             },
         };
-        formData.append("media", chosenPhoto);
+        console.log(chosenPhoto);
+        formData.append("media", chosenPhoto.uri);
 
         await axios.post(`${baseUri.outter_net}/api/v1/media`, formData, config)
             .then(res => {
@@ -62,7 +65,7 @@ export default ({ navigation }) => {
                 navigation.navigate("WritePost", res.data);
             })
             .catch(e => {
-                console.log(e);
+                console.log(e.response.data);
             });
     }
     const HeaderRight = () => (
@@ -85,11 +88,12 @@ export default ({ navigation }) => {
     const numColumns = 4;
     const { width } = useWindowDimensions();
     const choosePhoto = (uri) => {
-        console.log(chosenPhoto);
+        console.log(uri);
         setChosenPhoto(uri);
     };
     const renderItem = ({ item: photo }) => (
-        <TouchableOpacity onPress={() => choosePhoto(photo.uri)}>
+        console.log(photo),
+        <TouchableOpacity onPress={() => choosePhoto(photo)}>
             <Image
                 source={{ uri: photo.uri }}
                 style={{ width: width / numColumns, height: 100 }}
@@ -98,7 +102,7 @@ export default ({ navigation }) => {
                 <Ionicons
                     name="checkmark-circle"
                     size={18}
-                    color={photo.uri === chosenPhoto ? 'blue' : "white"}
+                    color={photo.uri === chosenPhoto.uri ? 'blue' : "white"}
                 />
             </View>
         </TouchableOpacity>
@@ -108,7 +112,7 @@ export default ({ navigation }) => {
             <View style={Style.Top}>
                 {chosenPhoto !== "" ? (
                     <Image
-                        source={{ uri: chosenPhoto }}
+                        source={{ uri: chosenPhoto.uri }}
                         style={{ width, height: "100%" }}
                     />
                 ) : null}
@@ -152,3 +156,77 @@ const FontStyle = StyleSheet.create({
         marginRight: 7,
     }
 })
+*/
+import React, { useState, useEffect } from 'react';
+import { Button, Image, View, Platform, TouchableOpacity, Text } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { baseUri } from '../../env';
+
+export default function ImagePickerExample() {
+  const [image, setImage] = useState(null);
+  const uploadImage = async() => {
+    const formData = new FormData();
+    const GetToken = async () => {
+        const token = await AsyncStorage.getItem("jwt");
+        return token;
+    };
+    const token = await GetToken();
+
+    const config = {
+        headers: { 
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+            authentication: token 
+        },
+    };
+    console.log(image.uri);
+    formData.append('media', image.uri);
+    console.log(formData);
+
+    await axios.post(`${baseUri.outter_net}/api/v1/media`, formData, config)
+        .then(res => {
+            console.log(res.data);
+            navigation.navigate("WritePost", res.data);
+        })
+        .catch(e => {
+            console.log(e.response.data);
+        });
+ }
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setImage(result);
+    }
+  };
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button title="Pick an image from camera roll" onPress={pickImage} />
+      {image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />}
+      <TouchableOpacity onPress={() => uploadImage()}>
+          <Text>Upload!</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
