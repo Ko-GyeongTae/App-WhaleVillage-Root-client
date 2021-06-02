@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Image, View, Platform, TouchableOpacity, Text, Alert, StyleSheet } from 'react-native';
+import { Button, Image, View, Platform, TouchableOpacity, Text, Alert, StyleSheet, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { baseUri } from '../../env';
 
-export default function ImagePickerExample({navigation}) {
-    const [image, setImage] = useState(null);
-    const [uploadedImage, setUploadedImage] = useState([]);
-    let uploaded = [];
+export default function ImagePickerExample({navigation, route}) {
+    const [image, setImage] = useState();
+    const [uploadedImage, setUploadedImage] = useState();
     const uploadImage = async () => {
         const GetToken = async () => {
             const token = await AsyncStorage.getItem("jwt");
@@ -41,11 +40,10 @@ export default function ImagePickerExample({navigation}) {
         }
 
         function transferComplete(evt) {
-          console.log(xhr.response);
+          console.log(xhr.responseText);
           Alert.alert('성공적으로 업로드했습니다.');
-          uploaded.append(xhr.response);
-          console.log(uploaded);
-          setImage(null);
+          route.params(xhr.response);
+          setUploadedImage(xhr.responseText);
           console.log("The transfer is complete.");
         }
 
@@ -60,7 +58,6 @@ export default function ImagePickerExample({navigation}) {
     }
     const HeaderRight = () => (
         <TouchableOpacity onPress={() => {
-            setUploadedImage(uploaded);
             navigation.navigate("WritePost", uploadedImage);
         }}>
             <Text style={FontStyle.HeaderRightText}>Next</Text>
@@ -98,11 +95,23 @@ export default function ImagePickerExample({navigation}) {
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Button title="Pick an image from camera roll" onPress={pickImage} />
-            {image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />}
-            <TouchableOpacity onPress={() => uploadImage()}>
-                <Text>Upload!</Text>
-            </TouchableOpacity>
+            <View style={{ height: '50%', alignItems: 'center', paddingTop: 50}}>
+                <Button title="Pick an image from camera roll" onPress={pickImage} />
+                <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator = {true}
+                    onMomentumScrollEnd ={
+                        () => {console.log('Scrolling is End')}
+                    }
+                >
+                    {image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />}
+                </ScrollView>
+            </View>
+            <View style={{ height: '50%' }}>
+                <TouchableOpacity onPress={() => uploadImage()}>
+                    <Text style={{fontSize: 24}}>Upload!</Text>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
