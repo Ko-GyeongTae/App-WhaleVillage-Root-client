@@ -11,7 +11,7 @@ import { baseUri } from "../../env";
 
 export default function UploadForm({ navigation, route }) {
     const [image, setImage] = useState({});
-    const [uploadedImage, setUploadedImage] = useState([]);
+    const [uploadedImage, setUploadedImage] = useState();
     const titleInput = useInput("");
     const _contentInput = contentInput("");
     const GetToken = async () => {
@@ -28,13 +28,13 @@ export default function UploadForm({ navigation, route }) {
         const { value: title } = titleInput;
         const { value: content } = _contentInput;
         const token = await GetToken();
-        console.log(Image);
         console.log(uploadedImage);
-        if(title !== "" && text !== ""){
+        console.log(title, content);
+        if(title !== "" && content !== ""){
             await axios.post(`${baseUri.outter_net}/api/v1/post`, {
                 "title" : title,
                 "content" : content,
-                "medias" : uploadedImage,
+                "medias" : [uploadedImage],
             }, {
                 headers:{
                     'authentication': token
@@ -47,14 +47,14 @@ export default function UploadForm({ navigation, route }) {
                 console.log(e);
             })
             titleInput.onChangeText("");
-            textInput.onChangeText("");
+            _contentInput.onChangeText("");
             navigation.navigate("Home");
             Keyboard.dismiss();
             Alert.alert("게시글 작성에 성공하였습니다.");
         } else {
-            setLoading(false);
-          Keyboard.dismiss();
-          Alert.alert("내용을 확인해주세요.");
+            console.log(title, content);
+            Keyboard.dismiss();
+            Alert.alert("내용을 확인해주세요.");
         }
     }
     const pickImage = async () => {
@@ -64,9 +64,6 @@ export default function UploadForm({ navigation, route }) {
             aspect: [4, 3],
             quality: 1,
         });
-
-        console.log(result);
-
         if (!result.cancelled) {
             setImage(result);
         }
@@ -74,8 +71,6 @@ export default function UploadForm({ navigation, route }) {
     };
 
     const uploadImage = async () => {
-        console.log('upload image');
-        
         const token = await GetToken();
        
         const xhr = new XMLHttpRequest();
@@ -105,9 +100,8 @@ export default function UploadForm({ navigation, route }) {
 
         function transferComplete(evt) {
           Alert.alert('성공적으로 업로드했습니다.');
-          console.log(xhr.response.uid);
           setUploadedImage(xhr.response.uid);
-          console.log(uploadedImage);
+          console.log(xhr.response);
           console.log("The transfer is complete.");
         }
 
@@ -199,7 +193,7 @@ const Style = StyleSheet.create({
         justifyContent: 'center',
     },
     Body: {
-        height: '55%',
+        height: '30%',
         backgroundColor: '#f0f0f0',
         alignItems: 'center',
     },
@@ -217,10 +211,13 @@ const Style = StyleSheet.create({
     },
     Content: {
         width: 340,
-        height: 370,
+        height: 200,
         backgroundColor: '#ffffff',
         paddingLeft: 10,
         textAlignVertical: 'top',
+        flexShrink: 1,  
+        textAlign:"left", 
+        textAlignVertical:"top"
     },
     Photo: {
         width: 150,

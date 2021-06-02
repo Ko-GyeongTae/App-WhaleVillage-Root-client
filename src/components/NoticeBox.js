@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React from "react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { baseUri } from "../../env";
 
@@ -102,7 +102,7 @@ export default (props) => {
       confirmAlert();
     }
     if(type === "update"){
-      props.navigations.navigate("WritePost", props);
+      props.navigations.navigate("WritePost");
     }
   }
 
