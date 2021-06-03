@@ -5,7 +5,7 @@ import DecoButton from "../components/DecoButton.js";
 export default ({ navigation }) => (
   
     <View style={Style.Container}>
-        <Text style={FontStyle.Title}>고래산마을</Text>
+        <Text style={FontStyle.Title}>이미지</Text>
       <View style={Style.ButtonArea}>
         <DecoButton
           text={"공지 설정"}
@@ -40,6 +40,14 @@ const Style = StyleSheet.create({
         alignItems: 'center',
         marginTop: '37.9%',
         width: '100%',
+    },
+    Grid: {
+      flex: 1,
+      flexDirection: 'row',
+      width: '100%',
+      height: '100%',
+      alignItems: 'stretch',
+      justifyContent: 'center',
     }
 });
 

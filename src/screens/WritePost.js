@@ -10,13 +10,16 @@ import * as ImagePicker from 'expo-image-picker';
 import { baseUri } from "../../env";
 
 export default function UploadForm({ navigation, route }) {
-    const [image, setImage] = useState({});
-    const [uploadedImage, setUploadedImage] = useState();
+    //const [image, setImage] = useState({});
+    //const [uploadedImage, setUploadedImage] = useState([]);
+    const [writing, setWriting] = useState(true);
+    let image = {};
+    let uploadedImage = [];
     const titleInput = useInput("");
     const _contentInput = contentInput("");
     const GetToken = async () => {
-            const token = await AsyncStorage.getItem("jwt");
-            return token;
+        const token = await AsyncStorage.getItem("jwt");
+        return token;
     };
     const PreLoad = async () => {
         if (!route.params) {
@@ -24,28 +27,27 @@ export default function UploadForm({ navigation, route }) {
         }
     }
     const UploadPost = async () => {
-        console.log("Upload!");
         const { value: title } = titleInput;
         const { value: content } = _contentInput;
         const token = await GetToken();
         console.log(uploadedImage);
         console.log(title, content);
-        if(title !== "" && content !== ""){
+        if (title !== "" && content !== "") {
             await axios.post(`${baseUri.outter_net}/api/v1/post`, {
-                "title" : title,
-                "content" : content,
-                "medias" : [uploadedImage],
+                "title": title,
+                "content": content,
+                "medias": uploadedImage,
             }, {
-                headers:{
+                headers: {
                     'authentication': token
                 }
             })
-            .then(res => {
-                console.log(res.data);
-            })
-            .catch(e => {
-                console.log(e);
-            })
+                .then(res => {
+                    console.log(res.data);
+                })
+                .catch(e => {
+                    console.log(e);
+                })
             titleInput.onChangeText("");
             _contentInput.onChangeText("");
             navigation.navigate("Home");
@@ -58,6 +60,7 @@ export default function UploadForm({ navigation, route }) {
         }
     }
     const pickImage = async () => {
+        setWriting(false);
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
@@ -65,14 +68,49 @@ export default function UploadForm({ navigation, route }) {
             quality: 1,
         });
         if (!result.cancelled) {
-            setImage(result);
+            //setImage(result);
+            image = result;
+            console.log(result.uri.split('.')[1]);
         }
-        uploadImage();
+        Alert.alert(
+            '업로드하시겠습니까?',
+            '',
+            [
+                {
+                    text: '예',
+                    onPress: () => uploadImage(),
+                },
+                {
+                    test: '아니오',
+                    onPress: () => null,
+                }
+            ],
+        );
     };
 
     const uploadImage = async () => {
         const token = await GetToken();
-       
+        const media = new FormData();
+        media.append('media', {
+            uri: image.uri,
+            type: ['image/jpeg', 'video/mp4'],
+            name: ['photo.jpg', 'video.mp4'],
+        });
+        const config = { headers: { 
+            'Content-Type': 'multipart/form-data',
+            'authentication': token,  
+        } };
+        await axios
+            .post(`${baseUri.outter_net}/api/v1/media`, media, config)
+            .then(res => {
+                console.log(res.data);
+                Alert.alert('이미지 업로드에 성공했습니다.');
+                //setUploadedImage([res.data.uid]);
+                uploadedImage.push(res.data.uid);
+                console.log(uploadedImage);
+            })
+            .catch(err => console.log(err.response));
+        /*
         const xhr = new XMLHttpRequest();
         const formData = new FormData();
         formData.append('media', {
@@ -87,32 +125,26 @@ export default function UploadForm({ navigation, route }) {
         xhr.addEventListener("progress", updateProgress);
         xhr.addEventListener("load", transferComplete);
         xhr.addEventListener("error", transferFailed);
-        xhr.addEventListener("abort", transferCanceled);
         // progress on transfers from the server to the client (downloads)
-        function updateProgress (oEvent) {
-          if (oEvent.lengthComputable) {
-            return <Text>Loading</Text>
-            // ...
-          } else {
-            // Unable to compute progress information since the total size is unknown
-          }
+        function updateProgress(oEvent) {
+            if (oEvent.lengthComputable) {
+                return <Text>Loading</Text>
+                // ...
+            } else {
+                // Unable to compute progress information since the total size is unknown
+            }
         }
 
         function transferComplete(evt) {
-          Alert.alert('성공적으로 업로드했습니다.');
-          setUploadedImage(xhr.response.uid);
-          console.log(xhr.response);
-          console.log("The transfer is complete.");
+            setUploadedImage([...uploadImage, xhr.response.uid]);
+            console.log(xhr.response);
+            console.log("The transfer is complete.");
         }
 
         function transferFailed(evt) {
-          console.log("An error occurred while transferring the file.");
+            console.log("An error occurred while transferring the file.");
         }
-
-        function transferCanceled(evt) {
-          console.log("The transfer has been canceled by the user.");
-        }
-
+        */
     }
     const HeaderRight = () => (
         <TouchableOpacity onPress={() => UploadPost()}>
@@ -132,7 +164,8 @@ export default function UploadForm({ navigation, route }) {
             }
         })();
         PreLoad();
-    }, [])
+        console.log(image, uploadedImage);
+    }, [writing]);
     return (
         <View style={Style.Container}>
             <View style={Style.Header}>
@@ -215,9 +248,9 @@ const Style = StyleSheet.create({
         backgroundColor: '#ffffff',
         paddingLeft: 10,
         textAlignVertical: 'top',
-        flexShrink: 1,  
-        textAlign:"left", 
-        textAlignVertical:"top"
+        flexShrink: 1,
+        textAlign: "left",
+        textAlignVertical: "top"
     },
     Photo: {
         width: 150,

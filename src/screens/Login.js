@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Text, TouchableOpacity, StyleSheet, View } from "react-native";
+import { Alert, Text, TouchableOpacity, StyleSheet, View, Image } from "react-native";
 import InputBox from "../components/InputBox";
 import useInput from "../hooks/useInput";
 import { useLogIn } from "../../AuthContext";
@@ -33,11 +33,11 @@ export default () => {
                 console.log(error);
             });
     }
-
+    const HeaderImg = require('../../assets/whalevillage/admin/LoginHeader.png');
     return (
         <View style={Style.Container}>
 
-            <Text style={FontStyle.Title}>고래산마을 관리자</Text>
+            <Image style={Style.Image} source={HeaderImg}/>
             <View style={Style.Input}>
                 <InputBox
                     {...idInput}
@@ -74,15 +74,20 @@ const FontStyle = StyleSheet.create({
 const Style = StyleSheet.create({
     Container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        backgroundColor: '#eceae6',
+        backgroundColor: '#ffffff',
     },
     Input: {
         marginTop: '10%',
         width: '80%',
         height: '20%',
-        backgroundColor: '#eae8e4',
+        backgroundColor: '#ffffff',
         alignItems: 'center',
+    },
+    Image: {
+        width: 230,
+        height: 180,
+        marginTop: 100,
     }
 })

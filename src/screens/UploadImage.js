@@ -8,6 +8,7 @@ import { baseUri } from '../../env';
 export default function ImagePickerExample({navigation, route}) {
     const [image, setImage] = useState();
     const [uploadedImage, setUploadedImage] = useState();
+    let obj;
     const uploadImage = async () => {
         const GetToken = async () => {
             const token = await AsyncStorage.getItem("jwt");
@@ -18,7 +19,7 @@ export default function ImagePickerExample({navigation, route}) {
         const xhr = new XMLHttpRequest();
         const formData = new FormData();
         formData.append('media', {
-            uri: image.uri,
+            uri: obj.uri,
             type: 'image/jpeg',
             name: 'photo.jpg',
         });
@@ -76,7 +77,7 @@ export default function ImagePickerExample({navigation, route}) {
             }
         })();
         return console.log(uploadedImage);
-    }, []);
+    }, [uploadImage]);
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -89,7 +90,8 @@ export default function ImagePickerExample({navigation, route}) {
         console.log(result);
 
         if (!result.cancelled) {
-            setImage(result);
+            //setImage(result);
+            obj = result;
         }
     };
 
