@@ -25,7 +25,7 @@ export default () => {
     preLoad();
   }, []);
   return (
-    <AuthProvider isLoggedIn={true}>
+    <AuthProvider isLoggedIn={isLoggedIn}>
       <NavController />
     </AuthProvider>
   )

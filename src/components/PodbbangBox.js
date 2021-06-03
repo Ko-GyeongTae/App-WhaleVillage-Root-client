@@ -52,7 +52,7 @@ export default (props) => {
     };
 
     await axios
-      .post(`${baseUri.outter_net}/api/v1/primarylink`, {
+      .post(`${baseUri.outter_net}/api/v1/primarylink/${props.type}`, {
         uid: props.uid
       }, config)
       .then(function (response) {

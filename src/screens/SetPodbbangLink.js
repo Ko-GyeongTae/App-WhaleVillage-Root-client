@@ -7,10 +7,10 @@ import PTRView from "react-native-pull-to-refresh";
 import { baseUri } from "../../env";
 import PodbbangBox from "../components/PodbbangBox";
 
-export default ({navigation}) => {
+export default () => {
     const [podbbangList, setPodbbangList] = useState([]);
     const getList = async() => {
-        await axios.get(`${baseUri.outter_net}/api/v1/link/youtube`)
+        await axios.get(`${baseUri.outter_net}/api/v1/link/podbbang`)
         .then(res => {
             setPodbbangList(res.data);
             console.log(res.data);
@@ -52,6 +52,7 @@ export default ({navigation}) => {
                                 title={m.title}
                                 uid={m.uid}
                                 isPrimary={m.isPrimary}
+                                type={"podbbang"}
                             />
                         ))}
                     </ScrollView>
