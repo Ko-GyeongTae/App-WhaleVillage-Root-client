@@ -8,23 +8,29 @@ export default ({ navigation }) => {
   const EditPost = require('../../assets/whalevillage/admin/EditPost.png');
   const WritePost = require('../../assets/whalevillage/admin/WritePost.png');
   const YoutubeLink = require('../../assets/whalevillage/admin/YoutubeLink.png');
-  return(
+  const PodbbangLink = require('../../assets/whalevillage/admin/Podbbang.png');
+  return (
     <View style={Style.Container}>
-      <Image style={Style.Image} source={HomeHeader}/>
+      <Image style={Style.Image} source={HomeHeader} />
       <View style={Style.Grid}>
         <TouchableOpacity onPress={() => navigation.navigate("NoticeSetting")}>
-          <Image style={Style.ButtonArea} source={SetPost}/>
+          <Image style={Style.ButtonArea} source={SetPost} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("EditPost")}>
-          <Image style={Style.ButtonArea} source={EditPost}/>
+          <Image style={Style.ButtonArea} source={EditPost} />
         </TouchableOpacity>
       </View>
       <View style={Style.Grid}>
         <TouchableOpacity onPress={() => navigation.navigate("WritePost")}>
-          <Image style={Style.ButtonArea} source={WritePost}/>
+          <Image style={Style.ButtonArea} source={WritePost} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("SetYoutubeLink")}>
-          <Image style={Style.ButtonArea} source={YoutubeLink}/>
+          <Image style={Style.ButtonArea} source={YoutubeLink} />
+        </TouchableOpacity>
+      </View>
+      <View style={Style.Bottom} source={Style.Bottom}>
+        <TouchableOpacity onPress={() => navigation.navigate("SetPodbbangLink")}>
+          <Image style={Style.Bottom} source={PodbbangLink} />
         </TouchableOpacity>
       </View>
     </View>
@@ -32,33 +38,37 @@ export default ({ navigation }) => {
 };
 
 const Style = StyleSheet.create({
-    Container: {
-        flex: 1,
-        height: '100%',
-        alignItems: 'center',
-        color: 'white',
-        backgroundColor: '#687DFB',
-    },
-    ButtonArea: {
-        width: 120,
-        height: 140,
-        backgroundColor: 'red',
-        marginLeft: 5,
-        marginRight: 5,
-    },
-    Grid: {
-      flexDirection: 'row',
-      marginTop: 5,
-      marginBottom: 5,
-      width: 240,
-      height: 140,
-      alignItems: 'stretch',
-      justifyContent: 'center',
-    },
-    Image: {
-      width: 250,
-      height: 180,
-      marginTop: 100,
-      marginBottom: 30,
-    }
+  Container: {
+    flex: 1,
+    height: '100%',
+    alignItems: 'center',
+    color: 'white',
+    backgroundColor: '#687DFB',
+  },
+  ButtonArea: {
+    width: 120,
+    height: 130,
+    backgroundColor: 'red',
+    marginLeft: 5,
+    marginRight: 5,
+  },
+  Grid: {
+    flexDirection: 'row',
+    marginTop: 5,
+    marginBottom: 5,
+    width: 240,
+    height: 140,
+    alignItems: 'stretch',
+    justifyContent: 'center',
+  },
+  Image: {
+    width: 265,
+    height: 190,
+    marginTop: 90,
+    marginBottom: 30,
+  },
+  Bottom: {
+    width: 250,
+    height: 90,
+  }
 });

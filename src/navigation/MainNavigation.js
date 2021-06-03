@@ -6,6 +6,7 @@ import NoticeSetting from "../screens/NoticeSetting";
 import WritePost from "../screens/WritePost";
 import EditPost from "../screens/EditPost";
 import SetYoutubeLink from "../screens/SetYoutubeLink";
+import SetPodbbangLink from "../screens/SetPodbbangLink";
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,7 @@ export default () => (
       <Stack.Screen name="EditPost" component={EditPost} options={{headerTitle: '공지수정'}}/>
       <Stack.Screen name="NoticeSetting" component={NoticeSetting} options={{headerTitle: '공지목록'}}/>
       <Stack.Screen name="SetYoutubeLink" component={SetYoutubeLink} option={{headerTitle: '유튜브링크 설정'}}/>
+      <Stack.Screen name="SetPodbbangLink" component={SetPodbbangLink} option={{headerTitle: '팟방링크 설정'}}/>
     </Stack.Navigator>
   </NavigationContainer>
 );
