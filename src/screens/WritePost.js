@@ -81,7 +81,7 @@ export default function UploadForm({ navigation, route }) {
                     onPress: () => uploadImage(),
                 },
                 {
-                    test: '아니오',
+                    text: '아니오',
                     onPress: () => null,
                 }
             ],
@@ -93,8 +93,8 @@ export default function UploadForm({ navigation, route }) {
         const media = new FormData();
         media.append('media', {
             uri: image.uri,
-            type: ['image/jpeg', 'video/mp4'],
-            name: ['photo.jpg', 'video.mp4'],
+            type: 'image/jpeg',
+            name: 'photo.jpg',
         });
         const config = { headers: { 
             'Content-Type': 'multipart/form-data',
@@ -110,41 +110,6 @@ export default function UploadForm({ navigation, route }) {
                 console.log(uploadedImage);
             })
             .catch(err => console.log(err.response));
-        /*
-        const xhr = new XMLHttpRequest();
-        const formData = new FormData();
-        formData.append('media', {
-            uri: image.uri,
-            type: 'image/jpeg',
-            name: 'photo.jpg',
-        });
-        xhr.responseType = 'json';
-        xhr.open('POST', `${baseUri.outter_net}/api/v1/media`);
-        xhr.setRequestHeader('authentication', token);
-        xhr.send(formData);
-        xhr.addEventListener("progress", updateProgress);
-        xhr.addEventListener("load", transferComplete);
-        xhr.addEventListener("error", transferFailed);
-        // progress on transfers from the server to the client (downloads)
-        function updateProgress(oEvent) {
-            if (oEvent.lengthComputable) {
-                return <Text>Loading</Text>
-                // ...
-            } else {
-                // Unable to compute progress information since the total size is unknown
-            }
-        }
-
-        function transferComplete(evt) {
-            setUploadedImage([...uploadImage, xhr.response.uid]);
-            console.log(xhr.response);
-            console.log("The transfer is complete.");
-        }
-
-        function transferFailed(evt) {
-            console.log("An error occurred while transferring the file.");
-        }
-        */
     }
     const HeaderRight = () => (
         <TouchableOpacity onPress={() => UploadPost()}>
@@ -197,15 +162,9 @@ export default function UploadForm({ navigation, route }) {
                         () => { console.log('Scrolling is End') }
                     }
                 >
-                    {/*image?.map(m => {
-                        return (
-                            <TouchableOpacity onPress={() => {
-                                console.log(image.indexOf(m));
-                            }}>
-                                
-                            </TouchableOpacity>
-                        )
-                    })*/}
+                    {uploadedImage.map(img => {
+                        <Image source={{uri: `${baseUri.outter_net}/api/v1/media/${img}`}}/>
+                    })}
                 </ScrollView>
             </View>
         </View>
@@ -215,26 +174,26 @@ export default function UploadForm({ navigation, route }) {
 const Style = StyleSheet.create({
     Container: {
         flex: 1,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: "#687DFB",
     },
     Header: {
         width: '100%',
         height: '10%',
         marginTop: 0,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: "#687DFB",
         alignItems: 'center',
         justifyContent: 'center',
     },
     Body: {
         height: '30%',
-        backgroundColor: '#f0f0f0',
+        backgroundColor: "#687DFB",
         alignItems: 'center',
     },
     Bottom: {
         width: '100%',
         height: '45%',
         marginBottom: 0,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: "#f5f5f5",
     },
     Input: {
         width: 340,

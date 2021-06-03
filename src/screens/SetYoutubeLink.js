@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { StyleSheet, ScrollView, Text, View } from "react-native";
+import { StyleSheet, ScrollView, Text, View, Alert } from "react-native";
 import PTRView from "react-native-pull-to-refresh";
 import { baseUri } from "../../env";
 import PodbbangBox from "../components/PodbbangBox";
@@ -13,9 +13,10 @@ export default ({navigation}) => {
         await axios.get(`${baseUri.outter_net}/api/v1/link/youtube`)
         .then(res => {
             setPodbbangList(res.data);
+            console.log(res.data);
         })
         .catch(e => {
-            console.log(e);
+            Alert.alert("게시물 로딩에 실패했습니다.");
         })
     } 
 
@@ -63,7 +64,7 @@ export default ({navigation}) => {
 const Style = StyleSheet.create({
     Body: {
         width: '100%',
-        height: '90%',
+        height: '100%',
     },
 })
 
@@ -73,6 +74,6 @@ const Component = StyleSheet.create({
         height: '100%',
     },
     List:{
-        backgroundColor: "#f0f0f0"
+        backgroundColor: "#687DFB"
     }
 })

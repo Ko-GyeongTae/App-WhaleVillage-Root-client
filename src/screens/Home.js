@@ -1,32 +1,35 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
 import DecoButton from "../components/DecoButton.js";
 
-export default ({ navigation }) => (
-  
+export default ({ navigation }) => {
+  const HomeHeader = require('../../assets/whalevillage/admin/AdminHeader.png');
+  const SetPost = require('../../assets/whalevillage/admin/SetPost.png');
+  const EditPost = require('../../assets/whalevillage/admin/EditPost.png');
+  const WritePost = require('../../assets/whalevillage/admin/WritePost.png');
+  const YoutubeLink = require('../../assets/whalevillage/admin/YoutubeLink.png');
+  return(
     <View style={Style.Container}>
-        <Text style={FontStyle.Title}>이미지</Text>
-      <View style={Style.ButtonArea}>
-        <DecoButton
-          text={"공지 설정"}
-          onPress={() => navigation.navigate("NoticeSetting")}
-        />
-        <DecoButton
-          text={"공지 수정"}
-          onPress={() => navigation.navigate("EditPost")}
-        />
-        <DecoButton
-          text={"공지 작성"}
-          onPress={() => navigation.navigate("WritePost")}
-        />
-        <DecoButton
-          text={"유튜브링크 설정"}
-          onPress={() => navigation.navigate("SetYoutubeLink")}
-        />
+      <Image style={Style.Image} source={HomeHeader}/>
+      <View style={Style.Grid}>
+        <TouchableOpacity onPress={() => navigation.navigate("NoticeSetting")}>
+          <Image style={Style.ButtonArea} source={SetPost}/>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("EditPost")}>
+          <Image style={Style.ButtonArea} source={EditPost}/>
+        </TouchableOpacity>
+      </View>
+      <View style={Style.Grid}>
+        <TouchableOpacity onPress={() => navigation.navigate("WritePost")}>
+          <Image style={Style.ButtonArea} source={WritePost}/>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("SetYoutubeLink")}>
+          <Image style={Style.ButtonArea} source={YoutubeLink}/>
+        </TouchableOpacity>
       </View>
     </View>
-  
-);
+  )
+};
 
 const Style = StyleSheet.create({
     Container: {
@@ -34,27 +37,28 @@ const Style = StyleSheet.create({
         height: '100%',
         alignItems: 'center',
         color: 'white',
-        backgroundColor: '#204051',
+        backgroundColor: '#687DFB',
     },
     ButtonArea: {
-        alignItems: 'center',
-        marginTop: '37.9%',
-        width: '100%',
+        width: 120,
+        height: 140,
+        backgroundColor: 'red',
+        marginLeft: 5,
+        marginRight: 5,
     },
     Grid: {
-      flex: 1,
       flexDirection: 'row',
-      width: '100%',
-      height: '100%',
+      marginTop: 5,
+      marginBottom: 5,
+      width: 240,
+      height: 140,
       alignItems: 'stretch',
       justifyContent: 'center',
+    },
+    Image: {
+      width: 250,
+      height: 180,
+      marginTop: 100,
+      marginBottom: 30,
     }
 });
-
-const FontStyle = StyleSheet.create({
-    Title: {
-        paddingTop: 50,
-        fontSize: 60,
-        color: 'white',
-    }
-})

@@ -62,7 +62,7 @@ export default ({navigation}) => {
 const Style = StyleSheet.create({
     Body: {
         width: '100%',
-        height: '90%',
+        height: '100%',
     },
 });
 
@@ -72,6 +72,6 @@ const Component = StyleSheet.create({
         height: '100%',
     },
     List:{
-        backgroundColor: "#f0f0f0"
+        backgroundColor: "#687DFB"
     }
 })

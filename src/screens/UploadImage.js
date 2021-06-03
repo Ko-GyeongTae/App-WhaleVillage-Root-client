@@ -96,7 +96,7 @@ export default function ImagePickerExample({navigation, route}) {
     };
 
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
             <View style={{ height: '50%', alignItems: 'center', paddingTop: 50}}>
                 <Button title="Pick an image from camera roll" onPress={pickImage} />
                 <ScrollView

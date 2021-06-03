@@ -49,14 +49,13 @@ export default (props) => {
         const config = {
           headers: { authentication: token },
         };
-    
+        
         await axios
           .post(`${baseUri.outter_net}/api/v1/primarylink`,{
             uid: props.uid
           }, config)
           .then(function (response) {
-            console.log(response.data);
-            props.onPress();
+            Alert.alert("대표게시물로 등록되었습니다.");
           })
           .catch(function (error) {
             console.log(error.response);
