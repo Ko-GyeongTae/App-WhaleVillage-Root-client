@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import React from "react";
 import { useState } from "react";
@@ -12,41 +13,10 @@ export default ({ navigation }) => {
     useEffect(() => {
         GetList();
     }, []);
-    const PostDelete = async () => {
-        const token = await GetToken();
-    
-        const config = {
-          headers: { authentication: token },
-        };
-    
-        await axios
-          .delete(`${baseUri.outter_net}/api/v1/post/${props.uid}`, config)
-          .then(function (response) {
-            console.log(response.data);
-          })
-          .catch(function (error) {
-            console.log(error);
-            Alert.alert("게시물을 삭제할 수 없습니다.");
-          });
+    const GetToken = async () => {
+        const token = await AsyncStorage.getItem("jwt");
+        return token;
     };
-    
-    const confirmAlert = () => {
-        Alert.alert(
-          "삭제하시겠습니까?",
-          "",
-          [
-            {
-              text: "No",
-              onPress: () => null,
-            },
-            {
-              text: "Yes",
-              onPress: () => PostDelete(),
-            },
-          ],
-          { cancelable: false }
-        );
-      };
     const GetList = async () => {
         await axios.get(`${baseUri.outter_net}/api/v1/post`)
             .then(res => {
@@ -57,6 +27,41 @@ export default ({ navigation }) => {
                 console.log(e);
             })
     }
+    const PostDelete = async (args) => {
+        const token = await GetToken();
+
+        const config = {
+            headers: { authentication: token },
+        };
+
+        await axios
+            .delete(`${baseUri.outter_net}/api/v1/post/${args}`, config)
+            .then(function (response) {
+                console.log(response.data);
+                navigation.navigate("WritePost");
+            })
+            .catch(function (error) {
+                console.log(error);
+                Alert.alert("게시물을 수정할 수 없습니다.");
+            })
+    };
+    const confirmAlert = (args) => {
+        Alert.alert(
+            "수정하시겠습니까?",
+            "수정 확인후 복구 할 수 없습니다.",
+            [
+                {
+                    text: "No",
+                    onPress: () => null,
+                },
+                {
+                    text: "Yes",
+                    onPress: () => PostDelete(args),
+                },
+            ],
+            { cancelable: false }
+        );
+    };
     return (
         <View style={Style.Container}>
             <View style={Style.Body}>
@@ -78,7 +83,7 @@ export default ({ navigation }) => {
                     >
                         {noticeList.length === 0 && <Text style={{ marginTop: 20 }}>게시물이 없습니다.</Text>}
                         {noticeList?.map(notice => (
-                            <TouchableOpacity onPress={() => confirmAlert()}>
+                            <TouchableOpacity key={notice.uid} style={{width: 350, height: 80}} onPress={() => confirmAlert()}>
                                 <NoticeBox
                                     key={notice.uid}
                                     date={notice.date}

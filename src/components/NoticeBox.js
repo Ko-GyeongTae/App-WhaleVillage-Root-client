@@ -1,9 +1,5 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import React from "react";
-import { useState, useEffect } from 'react';
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { baseUri } from "../../env";
+import { StyleSheet, Text, View } from 'react-native';
 
 const Component = StyleSheet.create({
   Component: {
@@ -44,11 +40,6 @@ const FontStyle = StyleSheet.create({
 
 export default (props) => {
   const date = new Date(props.date);
-  const GetToken = async () => {
-    const token = await AsyncStorage.getItem("jwt");
-    return token;
-  };
-
   return (
     <View style={Component.Component}>
       <View style={Component.Header}>

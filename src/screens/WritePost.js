@@ -95,6 +95,7 @@ export default function UploadForm({ navigation, route }) {
             'Content-Type': 'multipart/form-data',
             'authentication': token,  
         } };
+        console.log(media, config);
         await axios
             .post(`${baseUri.outter_net}/api/v1/media`, media, config)
             .then(res => {
@@ -105,7 +106,7 @@ export default function UploadForm({ navigation, route }) {
                 setUploadingImage(false);
             })
             .catch(err => {
-                console.log(err.response.data);
+                console.log(err.response);
                 setUploadingImage(false);
             });
             
