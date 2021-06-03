@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "WhaleVillage-Manager",
+    "name": "고래산마을-관리자",
     "slug": "WhaleVillage-Manager",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/whalevillage/app-icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/whalevillage/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -22,7 +22,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/whalevillage/app-icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.busanpanda.WhaleVillageManager"

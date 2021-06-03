@@ -10,11 +10,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { baseUri } from "../../env";
 
 export default function UploadForm({ navigation, route }) {
-    //const [image, setImage] = useState({});
-    //const [uploadedImage, setUploadedImage] = useState([]);
     const [writing, setWriting] = useState(true);
+    const [uploadedImage, setUploadedImage] = useState([]);
+    const [uploadingImage, setUploadingImage] = useState(false);
     let image = {};
-    let uploadedImage = [];
     const titleInput = useInput("");
     const _contentInput = contentInput("");
     const GetToken = async () => {
@@ -30,8 +29,6 @@ export default function UploadForm({ navigation, route }) {
         const { value: title } = titleInput;
         const { value: content } = _contentInput;
         const token = await GetToken();
-        console.log(uploadedImage);
-        console.log(title, content);
         if (title !== "" && content !== "") {
             await axios.post(`${baseUri.outter_net}/api/v1/post`, {
                 "title": title,
@@ -54,7 +51,6 @@ export default function UploadForm({ navigation, route }) {
             Keyboard.dismiss();
             Alert.alert("게시글 작성에 성공하였습니다.");
         } else {
-            console.log(title, content);
             Keyboard.dismiss();
             Alert.alert("내용을 확인해주세요.");
         }
@@ -62,15 +58,12 @@ export default function UploadForm({ navigation, route }) {
     const pickImage = async () => {
         setWriting(false);
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
+            mediaTypes: ImagePicker.MediaTypeOptions.All
         });
         if (!result.cancelled) {
             //setImage(result);
             image = result;
-            console.log(result.uri.split('.')[1]);
+            console.log(result);
         }
         Alert.alert(
             '업로드하시겠습니까?',
@@ -89,12 +82,14 @@ export default function UploadForm({ navigation, route }) {
     };
 
     const uploadImage = async () => {
+        setUploadingImage(true);
+        Alert.alert("이미지 업로드 중입니다. 잠시만 기다려주세요.")
         const token = await GetToken();
         const media = new FormData();
+        
         media.append('media', {
             uri: image.uri,
-            type: 'image/jpeg',
-            name: 'photo.jpg',
+            name: "media"
         });
         const config = { headers: { 
             'Content-Type': 'multipart/form-data',
@@ -105,11 +100,15 @@ export default function UploadForm({ navigation, route }) {
             .then(res => {
                 console.log(res.data);
                 Alert.alert('이미지 업로드에 성공했습니다.');
-                //setUploadedImage([res.data.uid]);
-                uploadedImage.push(res.data.uid);
+                setUploadedImage(oldList => [...oldList, res.data.uid]);
                 console.log(uploadedImage);
+                setUploadingImage(false);
             })
-            .catch(err => console.log(err.response));
+            .catch(err => {
+                console.log(err.response.data);
+                setUploadingImage(false);
+            });
+            
     }
     const HeaderRight = () => (
         <TouchableOpacity onPress={() => UploadPost()}>
@@ -130,7 +129,7 @@ export default function UploadForm({ navigation, route }) {
         })();
         PreLoad();
         console.log(image, uploadedImage);
-    }, [writing]);
+    }, [writing, uploadingImage]);
     return (
         <View style={Style.Container}>
             <View style={Style.Header}>

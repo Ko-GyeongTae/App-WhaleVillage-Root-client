@@ -43,77 +43,20 @@ const FontStyle = StyleSheet.create({
 });
 
 export default (props) => {
-  console.log(props);
-  const [noticeList, setNoticeList] = useState([]);
   const date = new Date(props.date);
   const GetToken = async () => {
     const token = await AsyncStorage.getItem("jwt");
     return token;
   };
-  const GetList = async () => {
-    await axios.get(`${baseUri.outter_net}/api/v1/post`)
-      .then(res => {
-        console.log(res.data);
-        setNoticeList(res.data);
-      })
-      .catch(e => {
-        console.log(e);
-      })
-  }
-  const PostDelete = async () => {
-    const token = await GetToken();
-
-    const config = {
-      headers: { authentication: token },
-    };
-
-    await axios
-      .delete(`${baseUri.outter_net}/api/v1/post/${props.uid}`, config)
-      .then(function (response) {
-        console.log(response);
-        GetList();
-      })
-      .catch(function (error) {
-        console.log(error);
-        Alert.alert("게시물을 삭제할 수 없습니다.");
-      });
-  };
-
-  const confirmAlert = () => {
-    Alert.alert(
-      "삭제하시겠습니까?",
-      "",
-      [
-        {
-          text: "No",
-          onPress: () => null,
-        },
-        {
-          text: "Yes",
-          onPress: () => PostDelete(),
-        },
-      ],
-      { cancelable: false }
-    );
-  };
-
-  const onPressFunc = (type) => {
-    if(type === "delete"){
-      confirmAlert();
-    }
-    if(type === "update"){
-      props.navigations.navigate("WritePost");
-    }
-  }
 
   return (
-    <TouchableOpacity style={Component.Component} onPress={() => onPressFunc(props.type)}>
+    <View style={Component.Component}>
       <View style={Component.Header}>
         <Text style={FontStyle.Title}>{props.title}</Text>
       </View>
       <View style={Component.Bottom}>
         <Text style={FontStyle.Day}>{`${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}일 ${date.getHours() > 12 ? `오후 ${date.getHours() - 12}` : `오전 ${date.getHours()}`}시 ${date.getMinutes()}분 ${date.getSeconds()}초`}</Text>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
