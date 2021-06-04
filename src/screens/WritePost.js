@@ -89,11 +89,16 @@ export default function UploadForm({ navigation, route }) {
         
         media.append('media', {
             uri: image.uri,
-            name: "media"
+            name: "media",
+            type: 'multipart/form-data'
         });
         const config = { headers: { 
             'Content-Type': 'multipart/form-data',
             'authentication': token,  
+            onUploadProgress: function(progressEvent) {
+                var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                console.log(percentCompleted)
+            }
         } };
         console.log(media, config);
         await axios
@@ -106,8 +111,9 @@ export default function UploadForm({ navigation, route }) {
                 setUploadingImage(false);
             })
             .catch(err => {
-                console.log(err.response);
+                console.log(err);
                 setUploadingImage(false);
+                Alert.alert('이미지 업로드에 실패했습니다.');
             });
             
     }
