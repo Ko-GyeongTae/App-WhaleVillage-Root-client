@@ -1,6 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
-import DecoButton from "../components/DecoButton.js";
+import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 export default ({ navigation }) => {
   const HomeHeader = require('../../assets/whalevillage/admin/AdminHeader.png');
@@ -13,17 +12,18 @@ export default ({ navigation }) => {
     <View style={Style.Container}>
       <Image style={Style.Image} source={HomeHeader} />
       <View style={Style.Grid}>
-        <TouchableOpacity onPress={() => navigation.navigate("NoticeSetting")}>
-          <Image style={Style.ButtonArea} source={SetPost} />
+        <TouchableOpacity onPress={() => navigation.navigate("WritePost")}>
+          <Image style={Style.ButtonArea} source={WritePost} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("EditPost")}>
           <Image style={Style.ButtonArea} source={EditPost} />
         </TouchableOpacity>
       </View>
       <View style={Style.Grid}>
-        <TouchableOpacity onPress={() => navigation.navigate("WritePost")}>
-          <Image style={Style.ButtonArea} source={WritePost} />
+        <TouchableOpacity onPress={() => navigation.navigate("NoticeSetting")}>
+          <Image style={Style.ButtonArea} source={SetPost} />
         </TouchableOpacity>
+
         <TouchableOpacity onPress={() => navigation.navigate("SetYoutubeLink")}>
           <Image style={Style.ButtonArea} source={YoutubeLink} />
         </TouchableOpacity>
