@@ -9,7 +9,6 @@ import PodbbangBox from "../components/PodbbangBox";
 
 export default () => {
     const [youtubeList, setYoutubeList] = useState([]);
-    const [primary, setPrimary] = useState(false);
 
     const getList = async() => {
         await axios.get(`${baseUri.outter_net}/api/v1/link/youtube`)
@@ -26,7 +25,7 @@ export default () => {
     useEffect(() => {
         getList();
         console.log('rerender');
-    }, [primary]);
+    }, []);
 
     return (
         <View style={Component.Container}>

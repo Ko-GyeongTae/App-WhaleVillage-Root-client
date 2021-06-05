@@ -23,7 +23,7 @@ export default () => {
     const count = podbbangList.length;
     useEffect(() => {
         getList()
-    });
+    }, []);
 
     return (
         <View style={Component.Container}>
