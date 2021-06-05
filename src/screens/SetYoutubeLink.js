@@ -8,11 +8,13 @@ import { baseUri } from "../../env";
 import PodbbangBox from "../components/PodbbangBox";
 
 export default () => {
-    const [podbbangList, setPodbbangList] = useState([]);
+    const [youtubeList, setYoutubeList] = useState([]);
+    const [primary, setPrimary] = useState(false);
+
     const getList = async() => {
         await axios.get(`${baseUri.outter_net}/api/v1/link/youtube`)
         .then(res => {
-            setPodbbangList(res.data);
+            setYoutubeList(res.data);
             console.log(res.data);
         })
         .catch(e => {
@@ -20,10 +22,11 @@ export default () => {
         })
     } 
 
-    const count = podbbangList.length;
+    const count = youtubeList.length;
     useEffect(() => {
-        getList()
-    }, []);
+        getList();
+        console.log('rerender');
+    }, [primary]);
 
     return (
         <View style={Component.Container}>
@@ -45,9 +48,9 @@ export default () => {
                         }}
                     >
                         {count === 0 && <Text>게시물이 없습니다.</Text>}
-                        {podbbangList?.map(m => (
+                        {youtubeList?.map(m => (
                             <PodbbangBox 
-                                onPress={() => getList()}
+                                onPress={() => setPrimary(true)}
                                 key={m.uid}
                                 title={m.title}
                                 uid={m.uid}

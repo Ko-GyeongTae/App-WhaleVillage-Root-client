@@ -28,6 +28,7 @@ export default function UploadForm({ navigation, route }) {
     const UploadPost = async () => {
         const { value: title } = titleInput;
         const { value: content } = _contentInput;
+        console.log(title, content);
         const token = await GetToken();
         if (title !== "" && content !== "") {
             await axios.post(`${baseUri.outter_net}/api/v1/post`, {
@@ -95,7 +96,7 @@ export default function UploadForm({ navigation, route }) {
         const config = { headers: { 
             'Content-Type': 'multipart/form-data',
             'authentication': token,  
-            onUploadProgress: function(progressEvent) {
+            'onUploadProgress': function(progressEvent) {
                 var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
                 console.log(percentCompleted)
             }
@@ -118,7 +119,11 @@ export default function UploadForm({ navigation, route }) {
             
     }
     const HeaderRight = () => (
-        <TouchableOpacity onPress={() => UploadPost()}>
+        <TouchableOpacity onPress={() => {
+            setWriting(false);
+            console.log(writing);
+            UploadPost();
+        }}>
             <Text style={FontStyle.HeaderRightText}>Next</Text>
         </TouchableOpacity>
     );
@@ -135,8 +140,8 @@ export default function UploadForm({ navigation, route }) {
             }
         })();
         PreLoad();
-        console.log(image, uploadedImage);
-    }, [writing, uploadingImage]);
+        console.log('rerender');
+    });
     return (
         <View style={Style.Container}>
             <View style={Style.Header}>
