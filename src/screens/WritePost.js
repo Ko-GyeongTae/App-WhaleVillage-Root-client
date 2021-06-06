@@ -68,6 +68,7 @@ export default function UploadForm({ navigation, route }) {
             //setImage(result);
             image = result;
             console.log(result);
+            console.log(image.uri.split('.').pop());
         }
         Alert.alert(
             '업로드하시겠습니까?',
@@ -93,7 +94,7 @@ export default function UploadForm({ navigation, route }) {
 
         media.append('media', {
             uri: image.uri,
-            name: `photo.${image.uri.split('.')[1]}`,
+            name: `photo.${image.uri.split('.').pop()}`,
             type: 'multipart/form-data'
         });
         const config = {
