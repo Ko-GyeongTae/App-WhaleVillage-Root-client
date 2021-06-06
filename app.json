@@ -18,7 +18,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.busanpanda.WhaleVillageManager"
+      "bundleIdentifier": "com.smartcreator.WhaleVillageManager"
     },
     "android": {
       "adaptiveIcon": {
