@@ -21,6 +21,7 @@
       "bundleIdentifier": "com.smartcreator.WhaleVillageManager"
     },
     "android": {
+      "versionCode": 2,
       "adaptiveIcon": {
         "foregroundImage": "./assets/whalevillage/app-icon.png",
         "backgroundColor": "#FFFFFF"
