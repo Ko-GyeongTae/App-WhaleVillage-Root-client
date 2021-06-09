@@ -17,8 +17,8 @@ export default () => (
       <Stack.Screen name="WritePost" component={WritePost} options={{headerTitle: '공지작성'}}/>
       <Stack.Screen name="EditPost" component={EditPost} options={{headerTitle: '공지수정'}}/>
       <Stack.Screen name="NoticeSetting" component={NoticeSetting} options={{headerTitle: '공지목록'}}/>
-      <Stack.Screen name="SetYoutubeLink" component={SetYoutubeLink} option={{headerTitle: '유튜브링크 설정'}}/>
-      <Stack.Screen name="SetPodbbangLink" component={SetPodbbangLink} option={{headerTitle: '팟방링크 설정'}}/>
+      <Stack.Screen name="SetYoutubeLink" component={SetYoutubeLink} options={{headerTitle: '유튜브링크 설정'}}/>
+      <Stack.Screen name="SetPodbbangLink" component={SetPodbbangLink} options={{headerTitle: '팟방링크 설정'}}/>
     </Stack.Navigator>
   </NavigationContainer>
 );
