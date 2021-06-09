@@ -17,8 +17,12 @@
       "**/*"
     ],
     "ios": {
+      "buildNumber": "2",
       "supportsTablet": true,
-      "bundleIdentifier": "com.smartcreator.WhaleVillageManager"
+      "bundleIdentifier": "com.smartcreator.WhaleVillageManager",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "사용자의 사진 및 동영상에 접근할 수 있도록 권한을 설정해주세요."
+      }
     },
     "android": {
       "versionCode": 2,
