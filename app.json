@@ -17,15 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "buildNumber": "3",
+      "buildNumber": "7",
       "supportsTablet": true,
       "bundleIdentifier": "com.smartcreator.WhaleVillageManager",
       "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "사용자의 사진 및 동영상에 접근할 수 있도록 권한을 설정해주세요."
+        "NSPhotoLibraryUsageDescription": "사용자의 사진과 동영상에 접근할 수 있도록 권한을 설정해주세요. 이 데이터는 공지를 작성할 때에만 사용됩니다."
       }
     },
     "android": {
-      "versionCode": 2,
+      "versionCode": 4,
       "adaptiveIcon": {
         "foregroundImage": "./assets/whalevillage/app-icon.png",
         "backgroundColor": "#FFFFFF"
