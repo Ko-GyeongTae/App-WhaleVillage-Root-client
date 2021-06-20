@@ -10,6 +10,7 @@ import NoticeBox from "../components/NoticeBox";
 
 export default ({ navigation }) => {
     const [noticeList, setNoticeList] = useState([]);
+    let post = {};
     useEffect(() => {
         GetList();
     }, []);
@@ -29,16 +30,23 @@ export default ({ navigation }) => {
     }
     const PostDelete = async (args) => {
         const token = await GetToken();
+        await axios
+            .get(`${baseUri.outter_net}/api/v1/post/${args.uid}`)
+            .then(res => {
+                console.log('Entire Information');
+                console.log(res.data);
+                post = res.data;
+            })
 
         const config = {
             headers: { authentication: token },
         };
 
         await axios
-            .delete(`${baseUri.outter_net}/api/v1/post/${args}`, config)
+            .delete(`${baseUri.outter_net}/api/v1/post/${args.uid}`, config)
             .then(function (response) {
                 console.log(response.data);
-                navigation.navigate("WritePost");
+                navigation.navigate("WritePost", post);
             })
             .catch(function (error) {
                 console.log(error);
@@ -83,7 +91,7 @@ export default ({ navigation }) => {
                     >
                         {noticeList.length === 0 && <Text style={{ marginTop: 20 }}>게시물이 없습니다.</Text>}
                         {noticeList?.map(notice => (
-                            <TouchableOpacity key={notice.uid} style={{width: 350, height: 80}} onPress={() => confirmAlert()}>
+                            <TouchableOpacity key={notice.uid} style={{ width: 350, height: 80 }} onPress={() => confirmAlert(notice)}>
                                 <NoticeBox
                                     key={notice.uid}
                                     date={notice.date}
