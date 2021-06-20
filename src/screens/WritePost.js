@@ -10,19 +10,27 @@ import * as ImagePicker from 'expo-image-picker';
 import { baseUri } from "../../env";
 
 export default function UploadForm({ navigation, route }) {
+    let prepost = route.params;
     const [writing, setWriting] = useState(true);
-    const [uploadedImage, setUploadedImage] = useState([]);
+    const [uploadedImage, setUploadedImage] = useState(prepost ? prepost.media : []);
+    const [prePost, setPrePost] = useState({});
     const [uploadingImage, setUploadingImage] = useState(false);
     let image = {};
-    const titleInput = useInput("");
-    const _contentInput = contentInput("");
+    console.log(route);
+    console.log('prepost');
+    console.log(prepost);
+    const titleInput = useInput(prepost ? prepost.title : "");
+    const _contentInput = contentInput(prepost ? prepost.contents : "");
+   
     const GetToken = async () => {
         const token = await AsyncStorage.getItem("jwt");
         return token;
     };
     const PreLoad = async () => {
-        if (!route.params) {
-            return;
+        if (prepost) {
+            setPrePost(prepost);
+            console.log('Preloading...');
+            console.log(prepost);
         }
     }
     const UploadPost = async () => {
@@ -127,7 +135,6 @@ export default function UploadForm({ navigation, route }) {
     const HeaderRight = () => (
         <TouchableOpacity onPress={() => {
             setWriting(false);
-            console.log(writing);
             UploadPost();
         }}>
             <Text style={FontStyle.HeaderRightText}>Next</Text>
@@ -145,8 +152,6 @@ export default function UploadForm({ navigation, route }) {
                 }
             }
         })();
-        PreLoad();
-        console.log('rerender');
     });
     return (
         <>
