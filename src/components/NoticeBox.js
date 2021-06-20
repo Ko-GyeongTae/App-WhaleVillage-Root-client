@@ -16,6 +16,7 @@ const Component = StyleSheet.create({
     flex: 1,
     paddingTop: 15,
     paddingLeft: 10,
+    paddingBottom: 4,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
@@ -43,10 +44,10 @@ export default (props) => {
   return (
     <View style={Component.Component}>
       <View style={Component.Header}>
-        <Text style={FontStyle.Title}>{props.title}</Text>
+        <Text style={FontStyle.Title}>{props.title.substring(0, 18)}</Text>
       </View>
       <View style={Component.Bottom}>
-        <Text style={FontStyle.Day}>{`${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}일 ${date.getHours() > 12 ? `오후 ${date.getHours() - 12}` : `오전 ${date.getHours()}`}시 ${date.getMinutes()}분 ${date.getSeconds()}초`}</Text>
+        <Text style={FontStyle.Day}>{`${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}일 ${date.getHours() > 12 ? `오후 ${date.getHours() - 12}` : `오전 ${date.getHours()}`}시 ${date.getMinutes()}분`}</Text>
       </View>
     </View>
   );
