@@ -36,21 +36,7 @@ export default ({ navigation }) => {
                 console.log('Entire Information');
                 console.log(res.data);
                 post = res.data;
-            })
-
-        const config = {
-            headers: { authentication: token },
-        };
-
-        await axios
-            .delete(`${baseUri.outter_net}/api/v1/post/${args.uid}`, config)
-            .then(function (response) {
-                console.log(response.data);
                 navigation.navigate("WritePost", post);
-            })
-            .catch(function (error) {
-                console.log(error);
-                Alert.alert("게시물을 수정할 수 없습니다.");
             })
     };
     const confirmAlert = (args) => {
