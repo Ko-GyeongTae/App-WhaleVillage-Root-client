@@ -16,13 +16,12 @@ const Component = StyleSheet.create({
     flex: 1,
     paddingTop: 15,
     paddingLeft: 10,
-    paddingBottom: 4,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
   },
   Bottom: {
     alignItems: 'flex-end',
-    paddingBottom: 5,
+    paddingBottom: 2,
     paddingRight: 5,
   }
 });
