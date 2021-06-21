@@ -13,7 +13,6 @@ export default function UploadForm({ navigation, route }) {
     let prepost = route.params;
     const [writing, setWriting] = useState(true);
     const [uploadedImage, setUploadedImage] = useState(prepost ? prepost.media : []);
-    const [prePost, setPrePost] = useState({});
     const [uploadingImage, setUploadingImage] = useState(false);
     let image = {};
     console.log(route);
@@ -21,18 +20,12 @@ export default function UploadForm({ navigation, route }) {
     console.log(prepost);
     const titleInput = useInput(prepost ? prepost.title : "");
     const _contentInput = contentInput(prepost ? prepost.contents : "");
-   
+
     const GetToken = async () => {
         const token = await AsyncStorage.getItem("jwt");
         return token;
     };
-    const PreLoad = async () => {
-        if (prepost) {
-            setPrePost(prepost);
-            console.log('Preloading...');
-            console.log(prepost);
-        }
-    }
+
     const UploadPost = async () => {
         const { value: title } = titleInput;
         const { value: content } = _contentInput;
@@ -58,7 +51,26 @@ export default function UploadForm({ navigation, route }) {
             _contentInput.onChangeText("");
             navigation.navigate("Home");
             Keyboard.dismiss();
-            Alert.alert("게시글 작성에 성공하였습니다.");
+            try{
+                if (prepost) {
+                    const config = {
+                        headers: { authentication: token },
+                    };
+                    await axios
+                        .delete(`${baseUri.outter_net}/api/v1/post/${prepost.uid}`, config)
+                        .then(function (response) {
+                            console.log(response.data);
+    
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                            //Alert.alert("게시물을 수정할 수 없습니다.");
+                        })
+                }
+                Alert.alert("게시글 작성에 성공하였습니다.");
+            } catch (e) {
+                Alert.alert("게시물을 수정 할 수 없습니다.")
+            }
         } else {
             Keyboard.dismiss();
             Alert.alert("내용을 확인해주세요.");
@@ -132,6 +144,26 @@ export default function UploadForm({ navigation, route }) {
             });
 
     }
+    const deleteImage = (img) => {
+        Alert.alert(
+            '삭제하시겠습니까?',
+            '',
+            [
+                {
+                    text: '예',
+                    onPress: () => {
+                        console.log(`Delete Image : ${img}`)
+                        uploadedImage.filter(oldList => console.log(oldList))
+                        setUploadedImage(uploadedImage.filter(oldList => oldList !== img))
+                    },
+                },
+                {
+                    text: '아니오',
+                    onPress: () => null,
+                }
+            ],
+        );
+    }
     const HeaderRight = () => (
         <TouchableOpacity onPress={() => {
             setWriting(false);
@@ -140,8 +172,18 @@ export default function UploadForm({ navigation, route }) {
             <Text style={FontStyle.HeaderRightText}>Next</Text>
         </TouchableOpacity>
     );
+    const HeaderLeft = () => (
+        <TouchableOpacity onPress={() => {
+            setWriting(false);
+            if(prepost) UploadPost();
+            else navigation.pop();
+        }}>
+            <Text style={FontStyle.HeaderRightText}>Back</Text>
+        </TouchableOpacity>
+    )
     useEffect(() => {
         navigation.setOptions({
+            headerLeft: HeaderLeft,
             headerRight: HeaderRight,
         });
         (async () => {
@@ -188,7 +230,11 @@ export default function UploadForm({ navigation, route }) {
                         }
                     >
                         {uploadedImage.map(img => {
-                            return <Image style={{ width: 100, height: '100%'}}key={img} source={{ uri: img }} />
+                            return (
+                                <TouchableOpacity key={img} onPress={() => deleteImage(img)}>
+                                    <Image style={{ width: 100, height: '100%' }} key={img} source={{ uri: img }} />
+                                </TouchableOpacity>
+                            )
                         })}
                     </ScrollView>
                 </View>
@@ -255,6 +301,11 @@ const Style = StyleSheet.create({
         color: 'blue',
         fontSize: 16,
         marginRight: 7,
+    },
+    HeaderLeftText: {
+        color: 'blue',
+        fontSize: 16,
+        marginLeft: 7,
     },
     Button: {
         width: 340,
