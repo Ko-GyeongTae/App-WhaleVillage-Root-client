@@ -11,13 +11,8 @@ import { baseUri } from "../../env";
 
 export default function UploadForm({ navigation, route }) {
     let prepost = route.params;
-    const [writing, setWriting] = useState(true);
-    const [uploadedImage, setUploadedImage] = useState(prepost ? prepost.media : []);
-    const [uploadingImage, setUploadingImage] = useState(false);
+    const [uploadedImage, setUploadedImage] = useState(prepost && prepost.media[0] !== "" ? prepost.media : []);
     let image = {};
-    console.log(route);
-    console.log('prepost');
-    console.log(prepost);
     const titleInput = useInput(prepost ? prepost.title : "");
     const _contentInput = contentInput(prepost ? prepost.contents : "");
 
@@ -29,7 +24,6 @@ export default function UploadForm({ navigation, route }) {
     const UploadPost = async () => {
         const { value: title } = titleInput;
         const { value: content } = _contentInput;
-        console.log(title, content);
         const token = await GetToken();
         if (title !== "" && content !== "") {
             await axios.post(`${baseUri.outter_net}/api/v1/post`, {
@@ -77,7 +71,6 @@ export default function UploadForm({ navigation, route }) {
         }
     }
     const pickImage = async () => {
-        setWriting(false);
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
@@ -107,7 +100,6 @@ export default function UploadForm({ navigation, route }) {
     };
 
     const uploadImage = async () => {
-        setUploadingImage(true);
         Alert.alert("이미지 업로드 중입니다. 잠시만 기다려주세요.")
         const token = await GetToken();
         const media = new FormData();
@@ -135,11 +127,9 @@ export default function UploadForm({ navigation, route }) {
                 Alert.alert('이미지 업로드에 성공했습니다.');
                 setUploadedImage(oldList => [...oldList, res.data.uid]);
                 console.log(uploadedImage);
-                setUploadingImage(false);
             })
             .catch(err => {
                 console.log(err);
-                setUploadingImage(false);
                 Alert.alert('이미지 업로드에 실패했습니다.');
             });
 
@@ -154,6 +144,7 @@ export default function UploadForm({ navigation, route }) {
                     onPress: () => {
                         console.log(`Delete Image : ${img}`)
                         uploadedImage.filter(oldList => console.log(oldList))
+                        if(uploadedImage === "") setUploadedImage([]);
                         setUploadedImage(uploadedImage.filter(oldList => oldList !== img))
                     },
                 },
@@ -166,7 +157,6 @@ export default function UploadForm({ navigation, route }) {
     }
     const HeaderRight = () => (
         <TouchableOpacity onPress={() => {
-            setWriting(false);
             UploadPost();
         }}>
             <Text style={FontStyle.HeaderRightText}>Next</Text>
@@ -174,7 +164,6 @@ export default function UploadForm({ navigation, route }) {
     );
     const HeaderLeft = () => (
         <TouchableOpacity onPress={() => {
-            setWriting(false);
             if(prepost) UploadPost();
             else navigation.pop();
         }}>
