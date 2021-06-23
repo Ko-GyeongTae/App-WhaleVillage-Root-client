@@ -25,7 +25,7 @@
       }
     },
     "android": {
-      "versionCode": 1,
+      "versionCode": 5,
       "adaptiveIcon": {
         "foregroundImage": "./assets/whalevillage/app-icon.png",
         "backgroundColor": "#FFFFFF"
