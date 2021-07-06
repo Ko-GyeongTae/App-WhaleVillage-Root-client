@@ -32,8 +32,7 @@ const Component = StyleSheet.create({
 const FontStyle = StyleSheet.create({
   Title: {
     color: 'black',
-    fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 14,
   },
 });
 
